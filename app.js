@@ -20,6 +20,7 @@ var LinkView = Backbone.View.extend({
 
 	events: {
 		'click .js-add-link' : 'addLink',
+		'click .js-delete-link' : 'deleteLink',
 	},
 
 	initialize: function() {
@@ -55,6 +56,7 @@ var LinkView = Backbone.View.extend({
 		// add the current text to the colleciton
 		this.collection.add({
 			
+			id: _.uniqueId(),
 			description: $('.js-description').val(),
 			link: $('.js-link').val(),
 
@@ -63,6 +65,12 @@ var LinkView = Backbone.View.extend({
 		this.render();
 
 	},
+
+	deleteLink: function(e) {
+		var id = $(e.target).attr('id');
+		this.collection.remove(id);
+		this.render();
+	}
 
 });
 

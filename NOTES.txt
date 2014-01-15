@@ -114,6 +114,21 @@ Talking Points
 				});
 				this.render();
 		- Let's check that this works
+		- Deletion needs to work like follows:
+			- When we click on the X, we should trigger an event that should delete
+			  the correct row.
+			- How do we know which row to delete? We can use an id! Let's add that
+			  to our template, and make sure we render with the new id. To add that
+			  id to the model, we'll just set the id when its added to the collection
+			  to be _.uniqueId()
+			- Let's add the event to the hash: 'click .js-delete-link' : 'deleteLink'
+			- The function needs to grab the id from the event passed in, and then remove
+				function(e) {
+					var id = $(e.target).attr('id');
+					this.collection.remove(id);
+					this.render()
+				}
+			- DON'T FORGET TO RENDER
 
 
 
