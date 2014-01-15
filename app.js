@@ -2,7 +2,15 @@
 /*
  * Link model
  */
-var Link = Backbone.Model.extend();
+var Link = Backbone.Model.extend({
+	
+	matches: function(text) {
+		var description = this.get('description').toLowerCase();
+		text = text.toLowerCase();
+		return description.indexOf( text ) >= 0;
+	}
+
+});
 
 /*
  * Link Collection
@@ -21,6 +29,7 @@ var LinkView = Backbone.View.extend({
 	events: {
 		'click .js-add-link' : 'addLink',
 		'click .js-delete-link' : 'deleteLink',
+		'keydown .js-search' : 'render',
 	},
 
 	initialize: function() {
@@ -31,13 +40,20 @@ var LinkView = Backbone.View.extend({
 	},
 
 	render: function() {
+		// filter the colleciton
+		var search_text = $('.js-search').val();
+		var filtered_collection = this.collection.filter(function(model) {
+			return model.matches(search_text);
+		});
+		filtered_collection = new Backbone.Collection(filtered_collection);
+
 		// munge together template code
 		var row_template_func = _.template( $('#single-row-template').html() );
 		var rows_html = '';
-		var N = this.collection.size();
+		var N = filtered_collection.size();
 
 		for(var i=0; i<N; i++) {
-			var model = this.collection.at(i);
+			var model = filtered_collection.at(i);
 			
 			rows_html += row_template_func( model.toJSON() );
 		}

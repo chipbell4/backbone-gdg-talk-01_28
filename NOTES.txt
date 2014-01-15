@@ -136,10 +136,29 @@ Talking Points
 			  This tells the view to listen for the collection to emit add or remove events
 			  and render when it is supposed to. This is one of the killer features of 
 			  backbone!
+		- Searching
+			- To make this easier, lets add a matches function to our model. It needs to do a 
+			  case-insensitive match against the text we pass it to our description and return
+			  true or false if there's a match. Something like:
+				matches: function(text) {
+					var description = this.get('description').toLowerCase();
+					text = text.toLowerCase();
+					return description.indexOf( text ) >= 0;
+				}
+			- Also, we need to listen to the change of that text box. We want it to work
+			  on the fly, so we'll need to listen to keydown events, in our case we'll
+			  just render.
+
+			- Lastly in our render, we'll need to filter the collection before we append the
+			  html. We can use filter. Also, we'll cast to a collection so the original code
+			  works the same:
+
+			  var search_text = $('.js-search').val();
+			  var filtered_collection = this.collection.filter(function(model) { return model.matches(search_text); });
+			  filtered_collection = new Backbone.Collection(filtered_collection);
+
+			- Make sure you update render to use the filtered_collection instead of the this.collection
+				
 
 
-
-
-			- Go ahead and add a matches function { matches: function(text) { return this.get('description').toLowerCase().indexOf( text.toLowerCase() ) > -1; } }
-			  This will give us a nice way to filter on our models later
 	
