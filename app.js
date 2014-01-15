@@ -4,6 +4,10 @@
  */
 var Link = Backbone.Model.extend({
 	
+	/**
+	 * Helper function to allow a model to determine
+	 * if it should be displayed, given some search text
+	 */
 	matches: function(text) {
 		var description = this.get('description').toLowerCase();
 		text = text.toLowerCase();
@@ -17,6 +21,11 @@ var Link = Backbone.Model.extend({
  */
 var LinkCollection = Backbone.Collection.extend({
 	
+	/**
+	 * Let's the collection know that the 
+	 * the model it should use is a Link, which allows
+	 * us to use the matches function we wrote
+	 */
 	model: Link,
 
 });
@@ -26,20 +35,44 @@ var LinkCollection = Backbone.Collection.extend({
  */
 var LinkView = Backbone.View.extend({
 
+	/**
+	 * Our events. The format is:
+	 * <event> <selector> <function>
+	 */
 	events: {
 		'click .js-add-link' : 'addLink',
 		'click .js-delete-link' : 'deleteLink',
-		'keydown .js-search' : 'render',
+		'keyup .js-search' : 'renderCollection',
 	},
 
+	/**
+	 * Essentially the constructor of the view.
+	 */
 	initialize: function() {
 		
 		this.collection = new LinkCollection();
-		this.listenTo(this.collection, 'add remove', this.render);
+		this.listenTo(this.collection, 'add remove', this.renderCollection);
 
 	},
 
+	/**
+	 * Does a full page render, which essentially moves
+	 * the template onto the page, and sets up eventing
+	 */
 	render: function() {
+		//  render it to the page
+		this.$el.html( $('#full-page-template').html() );
+		$('div.container').html(this.$el);
+		this.delegateEvents();
+
+	},
+
+	/**
+	 * Re-renders only the collection, so that we can
+	 * preserve events created on the static elements 
+	 * (like the search, or the add buttons)
+	 */
+	renderCollection: function() {
 		// filter the colleciton
 		var search_text = $('.js-search').val();
 		var filtered_collection = this.collection.filter(function(model) {
@@ -58,16 +91,13 @@ var LinkView = Backbone.View.extend({
 			rows_html += row_template_func( model.toJSON() );
 		}
 
-		var page_template_func = _.template( $('#full-page-template').html() );
-
-
-		//  render it to the page
-		this.$el.html( page_template_func({ rows: rows_html }));
-		$('div.container').html(this.$el);
-		this.delegateEvents();
-
+		// add that html to existing html on the page
+		this.$('#row-container').html(rows_html);
 	},
 
+	/**
+	 * Adds a new link to the collection
+	 */
 	addLink: function() {
 		
 		// add the current text to the colleciton
@@ -81,6 +111,9 @@ var LinkView = Backbone.View.extend({
 
 	},
 
+	/**
+	 * Deletes a link from the collection
+	 */
 	deleteLink: function(e) {
 		var id = $(e.target).attr('id');
 		this.collection.remove(id);
@@ -89,6 +122,9 @@ var LinkView = Backbone.View.extend({
 });
 
 
+/**
+ * When the document is ready, set up the view and run it!
+ */
 $(document).ready(function() {
 	
 	var view = new LinkView();

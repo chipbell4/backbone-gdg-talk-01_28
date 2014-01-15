@@ -82,19 +82,20 @@ Talking Points
 				- Then, build a template function: var template = _.template( html );
 				- Now try it out: template({ description: 'asdf', link: 'abcsdf' });
 		- Lastly, lets create a mega template (full-page-template id), that holds all of the code. And, where
-		  we have the rows, we'll just leave it blank with a placeholder: "rows"
+		  we have the rows, we'll just leave it blank. We're going to dynamically fill that in
 
 	- The view
 		- var SearchView = Backbone.View.extend();
 		- First, lets render the collection
 			- add an initialize method to the view, and create a collection to store (this.collection = new LinkCollection())
 			- add a render method to the view.
+			- This should only pull in the full page template and render
+			- add a collectionRender method. This will insert in the dynamic data.
 			- Create a template function from our template
 			- Loop over each element in the views collection, and run the template
 			  function on each model.toJSON();
 			- This returns a string each time. Push those together, and then
-			  put that into a template for the entire page, and then add it to the
-			  container div. (Watch me...)
+			  set that as the html for the row-container
 			- Also, call delegateEvents on the view, which will re-hook up events.
 			  This is sortof a hack, but its a result of our templating mechanism
 			- To see the view in action, we'll put a $(document).ready() handler
@@ -114,7 +115,7 @@ Talking Points
 					description: $('.js-description').val(),
 					link: $('.js-link').val()
 				});
-				this.render();
+				this.renderCollection();
 		- Let's check that this works
 		- Deletion needs to work like follows:
 			- When we click on the X, we should trigger an event that should delete
@@ -128,11 +129,11 @@ Talking Points
 				function(e) {
 					var id = $(e.target).attr('id');
 					this.collection.remove(id);
-					this.render()
+					this.renderCollection()
 				}
 			- DON'T FORGET TO RENDER
 			- To keep us from forgetting to render, let's listen to some events. In our initialize,
-			  add this line: this.listenTo(this.collection, 'add remove', this.render);
+			  add this line: this.listenTo(this.collection, 'add remove', this.renderCollection);
 			  This tells the view to listen for the collection to emit add or remove events
 			  and render when it is supposed to. This is one of the killer features of 
 			  backbone!
@@ -149,7 +150,7 @@ Talking Points
 			  on the fly, so we'll need to listen to keydown events, in our case we'll
 			  just render.
 
-			- Lastly in our render, we'll need to filter the collection before we append the
+			- Lastly in our renderColleciton, we'll need to filter the collection before we append the
 			  html. We can use filter. Also, we'll cast to a collection so the original code
 			  works the same:
 
@@ -157,7 +158,9 @@ Talking Points
 			  var filtered_collection = this.collection.filter(function(model) { return model.matches(search_text); });
 			  filtered_collection = new Backbone.Collection(filtered_collection);
 
-			- Make sure you update render to use the filtered_collection instead of the this.collection
+			- Make sure you update renderCollection to use the filtered_collection instead of the this.collection
+
+- That's a wrap
 				
 
 
