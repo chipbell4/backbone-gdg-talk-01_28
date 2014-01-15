@@ -17,63 +17,100 @@
 		<!-- Our application -->
 		<script src="app.js"></script>
 	</head>
-	<body class="container">
+	<body>
+		<div class="container">
 		
-		<!-- The search box -->
-		<div class="row">
-			<div class="input-group">
-				<span class="input-group-addon">
-					<span class="glyphicon glyphicon-search"></span>
-				</span>
-				<input type="text" class="form-control js-search" placeholder="Search">
+			<!-- The search box -->
+			<div class="row">
+				<div class="input-group">
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-search"></span>
+					</span>
+					<input type="text" class="form-control js-search" placeholder="Search">
+				</div>
 			</div>
+
+			<br/>
+			<hr/>
+			<br/>
+
+			<!-- The "dynamic" rows-->
+			<div id="row-container">
+				<div class="row">
+					<div class="col-xs-10 lead text-center">
+						<a href="http://backbonejs.org">Backbone.js</a>
+					</div>
+					<div class="col-xs-2">
+						<button class="js-add-link btn btn-default">&times;</button>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-10 lead text-center">
+						<a href="http://underscorejs.org">Underscore.js</a>
+					</div>
+					<div class="col-xs-2">
+						<button class="js-add-link btn btn-default">&times;</button>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-10 lead text-center">
+						<a href="http://coffeescript.org">CoffeeScript</a>
+					</div>
+					<div class="col-xs-2">
+						<button class="js-add-link btn btn-default">&times;</button>
+					</div>
+				</div>
+			</div>
+			<!-- The new box -->
+			<div class="row">
+				<div class="col-md-6">
+					<input type="text" placeholder="Description" class="form-control js-description"/>
+				</div>
+				<div class="col-md-4">
+					<input type="text" placeholder="Link" class="form-control js-link"/>
+				</div>
+				<div class="col-md-2">
+					<button class="js-add-link btn btn-default">+</button>
+				</div>
+			</div>
+
 		</div>
 
-		<br/>
-		<hr/>
-		<br/>
 
-		<!-- The "dynamic" rows-->
-		<div id="row-container">
-		<div class="row">
-			<div class="col-xs-10 lead text-center">
-				<a href="http://backbonejs.org">Backbone.js</a>
+		<script type="text/template" id="full-page-template">
+			<!-- The search box -->
+			<div class="row">
+				<div class="input-group">
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-search"></span>
+					</span>
+					<input type="text" class="form-control js-search" placeholder="Search">
+				</div>
 			</div>
-			<div class="col-xs-2">
-				<button class="js-add-link btn btn-default">&times;</button>
-			</div>
-		</div>
 
-		<div class="row">
-			<div class="col-xs-10 lead text-center">
-				<a href="http://underscorejs.org">Underscore.js</a>
-			</div>
-			<div class="col-xs-2">
-				<button class="js-add-link btn btn-default">&times;</button>
-			</div>
-		</div>
+			<br/>
+			<hr/>
+			<br/>
 
-		<div class="row">
-			<div class="col-xs-10 lead text-center">
-				<a href="http://coffeescript.org">CoffeeScript</a>
+			<!-- The "dynamic" rows-->
+			<div id="row-container">
+				<%= rows %>
 			</div>
-			<div class="col-xs-2">
-				<button class="js-add-link btn btn-default">&times;</button>
+			<!-- The new box -->
+			<div class="row">
+				<div class="col-md-6">
+					<input type="text" placeholder="Description" class="form-control js-description"/>
+				</div>
+				<div class="col-md-4">
+					<input type="text" placeholder="Link" class="form-control js-link"/>
+				</div>
+				<div class="col-md-2">
+					<button class="js-add-link btn btn-default">+</button>
+				</div>
 			</div>
-		</div>
-		</div>
-		<!-- The new box -->
-		<div class="row">
-			<div class="col-md-6">
-				<input type="text" placeholder="Description" class="form-control js-description"/>
-			</div>
-			<div class="col-md-4">
-				<input type="text" placeholder="Link" class="form-control js-link"/>
-			</div>
-			<div class="col-md-2">
-				<button class="js-add-link btn btn-default">+</button>
-			</div>
-		</div>
+		</script>
 
 		<script type="text/template" id="single-row-template">
 		<div class="row">

@@ -18,6 +18,10 @@ var LinkCollection = Backbone.Collection.extend({
  */
 var LinkView = Backbone.View.extend({
 
+	events: {
+		'click .js-add-link' : 'addLink',
+	},
+
 	initialize: function() {
 		
 		this.collection = new LinkCollection();
@@ -26,20 +30,39 @@ var LinkView = Backbone.View.extend({
 
 	render: function() {
 		// munge together template code
-		var template_func = _.template( $('#single-row-template').html() );
-		var new_html = '';
+		var row_template_func = _.template( $('#single-row-template').html() );
+		var rows_html = '';
 		var N = this.collection.size();
 
 		for(var i=0; i<N; i++) {
 			var model = this.collection.at(i);
 			
-			new_html += template_func( model.toJSON() );
+			rows_html += row_template_func( model.toJSON() );
 		}
 
-		// render it to the container
-		$('#row-container').html( new_html );
+		var page_template_func = _.template( $('#full-page-template').html() );
 
-	}
+
+		//  render it to the page
+		this.$el.html( page_template_func({ rows: rows_html }));
+		$('div.container').html(this.$el);
+		this.delegateEvents();
+
+	},
+
+	addLink: function() {
+		
+		// add the current text to the colleciton
+		this.collection.add({
+			
+			description: $('.js-description').val(),
+			link: $('.js-link').val(),
+
+		});
+
+		this.render();
+
+	},
 
 });
 

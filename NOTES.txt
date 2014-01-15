@@ -81,6 +81,8 @@ Talking Points
 				- Use jquery to get the html: var html = $('#single-row-template').html();
 				- Then, build a template function: var template = _.template( html );
 				- Now try it out: template({ description: 'asdf', link: 'abcsdf' });
+		- Lastly, lets create a mega template (full-page-template id), that holds all of the code. And, where
+		  we have the rows, we'll just leave it blank with a placeholder: "rows"
 
 	- The view
 		- var SearchView = Backbone.View.extend();
@@ -91,7 +93,8 @@ Talking Points
 			- Loop over each element in the views collection, and run the template
 			  function on each model.toJSON();
 			- This returns a string each time. Push those together, and then
-			  put the html on the page with jQuery
+			  put that into a template for the entire page, and then add it to the
+			  container div. (Watch me...)
 			- To see the view in action, we'll put a $(document).ready() handler
 			  which will render the view
 			- Now our page should be empty... But, we're about to fill it back up!
