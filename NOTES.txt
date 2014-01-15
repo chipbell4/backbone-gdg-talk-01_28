@@ -95,6 +95,8 @@ Talking Points
 			- This returns a string each time. Push those together, and then
 			  put that into a template for the entire page, and then add it to the
 			  container div. (Watch me...)
+			- Also, call delegateEvents on the view, which will re-hook up events.
+			  This is sortof a hack, but its a result of our templating mechanism
 			- To see the view in action, we'll put a $(document).ready() handler
 			  which will render the view
 			- Now our page should be empty... But, we're about to fill it back up!
@@ -129,6 +131,12 @@ Talking Points
 					this.render()
 				}
 			- DON'T FORGET TO RENDER
+			- To keep us from forgetting to render, let's listen to some events. In our initialize,
+			  add this line: this.listenTo(this.collection, 'add remove', this.render);
+			  This tells the view to listen for the collection to emit add or remove events
+			  and render when it is supposed to. This is one of the killer features of 
+			  backbone!
+
 
 
 

@@ -26,6 +26,7 @@ var LinkView = Backbone.View.extend({
 	initialize: function() {
 		
 		this.collection = new LinkCollection();
+		this.listenTo(this.collection, 'add remove', this.render);
 
 	},
 
@@ -62,14 +63,11 @@ var LinkView = Backbone.View.extend({
 
 		});
 
-		this.render();
-
 	},
 
 	deleteLink: function(e) {
 		var id = $(e.target).attr('id');
 		this.collection.remove(id);
-		this.render();
 	}
 
 });
