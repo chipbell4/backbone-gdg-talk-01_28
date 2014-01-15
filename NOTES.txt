@@ -1,0 +1,117 @@
+Talking Points
+
+1) What is Backbone?
+	- A Javascript Library to help organize front-end application code
+	- Written by Jeremy Ashkenas (who also writes CoffeeScript and Underscore.js)
+	- Go to website
+	- Make note that library is dependent on jQuery (a DOM manipulation library),
+	  and Underscore JS, a library that adds better list processing to Javascript 
+	  (such as map, filter, reduce, and other functional programming tools, along
+	  with a templating engine that we will use)
+
+2) How are we going to learn it today?
+	- Write a sample app to manage links that we want to go look at later (I 
+	  can't think of the site that already does this. Maybe a dumbed down
+	  Pinterest, but less girly?)
+	- Let's start with a boilerplate that I wrote (we can get it from github
+	  raw). Simple get the raw file and save it somewhere
+	- Show off the console. Its a useful tool to play around with code before
+	  you write it. Also, if your code is broken, you'll see the exception
+	  here. There's also a debugger!
+
+3) Understand what's there
+	- Create an app.js next to the boilerplate you downloaded, since its expecting
+	  one to be there
+	- Open the file in the browser, note the search, the static lists, and the add
+	  button.
+	- Our end result is to
+		- Have the search filter on the fly (keydown)
+		- The lists no longer static, but populated from what we've entered
+		- The delete button removes the link from the list
+		- The add button creates a new link in our list
+
+4) Plan out the app
+	- Open up the backbone site
+	- Backbone provides some constructs for us to organize everything
+		- A Model represents a single "chunk" of data. In our case, a single row on 
+		  the page
+		- A Collection represents a collection of models. In our case, this 
+		  represents the entire list of items
+		- A view represents a visual item on the page. A view can respond to events,
+		  and render items. It can change the way renders based on events, etc. To
+		  be simple, we'll let the whole page be a single view, and let that view
+		  manage all of our events
+	- Underscore also provides some useful stuff. 
+		- underscore can "filter" elements based on a key. We'll take advantage of
+		  that during a search
+		- Underscore has a "templating engine" that allows you to stub out HTML
+		  and specify only the parts that vary. In our case, each link row looks
+		  almost the same, except for the link text and href. So, we can template
+		  that out
+	- So in short, we'll need
+		- A "Link" model to represent a row
+		- A "LinkCollection" that contains all of our Links so we can filter
+		- A template for a single row that has placeholders for description
+		  and link
+
+5) Build the app
+	- Link Model
+		- var Link = Backbone.Model.extend();
+			- .extend works very similarly to class inheritance in Java or C++.
+			  However, the object model is slightly different, which distinguishes
+			  JS
+
+	- Link Collection
+		- var LinkCollection = Backbone.Collection.extend({ model: Link }); 
+			- This tells Backbone that when we fetch this collection, we should
+			  internally store them as a list of Links (so we get any useful methods
+			  it might provide).
+
+	- The template
+		- Let's copy the code for a single row into a container <script type="text/template"></script>
+		- Give it an id of "single-row-template"
+		- Where the link description and href are, replace it with <%= description %> and
+		  <%= link %> Respectively. These are our placeholders
+		- Play with it on the console.
+			- First, try a simple example of the underscore template
+				- var template_function = _.template( "Hello <%= name %>" );
+				- template_function({ name: 'Chip' });
+				- Use a couple of different values to see whats going on.
+			- Once we get the hang of that, try the template we just wrote
+				- Use jquery to get the html: var html = $('#single-row-template').html();
+				- Then, build a template function: var template = _.template( html );
+				- Now try it out: template({ description: 'asdf', link: 'abcsdf' });
+
+	- The view
+		- var SearchView = Backbone.View.extend();
+		- First, lets render the collection
+			- add an initialize method to the view, and create a collection to store (this.collection = new LinkCollection())
+			- add a render method to the view.
+			- Create a template function from our template
+			- Loop over each element in the views collection, and run the template
+			  function on each model.toJSON();
+			- This returns a string each time. Push those together, and then
+			  put the html on the page with jQuery
+			- Now our page should be empty... But, we're about to fill it back up!
+		- Now, let's hook up the events
+			- add an events hash.
+			- set up an event for clicking the js-add-link button:
+				events: {
+					'click .js-add-link' : 'addLink'
+				}
+			- The format is '<event_name> <jquery selector>' : '<function>'
+			- add an addLink function
+			- in there, get the values of the text fields $('.js-description').val()
+			  and add to the collection:
+			  	this.collection.add({
+					description: $('.js-description').val(),
+					link: $('.js-link').val()
+				});
+				this.render();
+		- Let's check that this works
+
+
+
+			- Go ahead and add a matches function { matches: function(text) { return this.get('description').toLowerCase().indexOf( text.toLowerCase() ) > -1; } }
+			  This will give us a nice way to filter on our models later
+	
