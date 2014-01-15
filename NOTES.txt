@@ -92,6 +92,8 @@ Talking Points
 			  function on each model.toJSON();
 			- This returns a string each time. Push those together, and then
 			  put the html on the page with jQuery
+			- To see the view in action, we'll put a $(document).ready() handler
+			  which will render the view
 			- Now our page should be empty... But, we're about to fill it back up!
 		- Now, let's hook up the events
 			- add an events hash.
