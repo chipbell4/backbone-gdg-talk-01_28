@@ -42,7 +42,7 @@ var LinkView = Backbone.View.extend({
 	events: {
 		'click .js-add-link' : 'addLink',
 		'click .js-delete-link' : 'deleteLink',
-		'keyup .js-search' : 'renderCollection',
+		'keyup .js-search' : 'render',
 	},
 
 	/**
@@ -50,8 +50,9 @@ var LinkView = Backbone.View.extend({
 	 */
 	initialize: function() {
 		
+		this.setElement('body', true);
 		this.collection = new LinkCollection();
-		this.listenTo(this.collection, 'add remove', this.renderCollection);
+		this.listenTo(this.collection, 'add remove', this.render);
 
 	},
 
@@ -59,20 +60,21 @@ var LinkView = Backbone.View.extend({
 	 * Does a full page render, which essentially moves
 	 * the template onto the page, and sets up eventing
 	 */
+	 /*
 	render: function() {
 		//  render it to the page
 		this.$el.html( $('#full-page-template').html() );
 		$('div.container').html(this.$el);
 		this.delegateEvents();
 
-	},
+	},*/
 
 	/**
 	 * Re-renders only the collection, so that we can
 	 * preserve events created on the static elements 
 	 * (like the search, or the add buttons)
 	 */
-	renderCollection: function() {
+	render: function() {
 		// filter the colleciton
 		var search_text = $('.js-search').val();
 		var filtered_collection = this.collection.filter(function(model) {
