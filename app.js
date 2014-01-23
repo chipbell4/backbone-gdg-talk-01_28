@@ -56,18 +56,6 @@ var LinkView = Backbone.View.extend({
 
 	},
 
-	/**
-	 * Does a full page render, which essentially moves
-	 * the template onto the page, and sets up eventing
-	 */
-	 /*
-	render: function() {
-		//  render it to the page
-		this.$el.html( $('#full-page-template').html() );
-		$('div.container').html(this.$el);
-		this.delegateEvents();
-
-	},*/
 
 	/**
 	 * Re-renders only the collection, so that we can
@@ -75,14 +63,23 @@ var LinkView = Backbone.View.extend({
 	 * (like the search, or the add buttons)
 	 */
 	render: function() {
-		// filter the colleciton
+
+		/*
+		 * filter the colleciton
+		 */
 		var search_text = $('.js-search').val();
 		var filtered_collection = this.collection.filter(function(model) {
+			
+			// Return true for only models that match the search text
 			return model.matches(search_text);
+
 		});
+
 		filtered_collection = new Backbone.Collection(filtered_collection);
 
-		// munge together template code
+		/*
+		 * concatenate the templated code
+		 */
 		var row_template_func = _.template( $('#single-row-template').html() );
 		var rows_html = '';
 		var N = filtered_collection.size();
@@ -93,7 +90,9 @@ var LinkView = Backbone.View.extend({
 			rows_html += row_template_func( model.toJSON() );
 		}
 
-		// add that html to existing html on the page
+		/*
+		 * add that html to existing html on the page
+		 */
 		this.$('#row-container').html(rows_html);
 	},
 
@@ -111,14 +110,20 @@ var LinkView = Backbone.View.extend({
 
 		});
 
+		/*
+		 * TODO: Clear the fields
+		 */
+
 	},
 
 	/**
 	 * Deletes a link from the collection
 	 */
 	deleteLink: function(e) {
+
 		var id = $(e.target).attr('id');
 		this.collection.remove(id);
+
 	}
 
 });
