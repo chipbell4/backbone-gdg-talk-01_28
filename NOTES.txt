@@ -81,26 +81,23 @@ Talking Points
 				- Use jquery to get the html: var html = $('#single-row-template').html();
 				- Then, build a template function: var template = _.template( html );
 				- Now try it out: template({ description: 'asdf', link: 'abcsdf' });
-		- Lastly, lets create a mega template (full-page-template id), that holds all of the code. And, where
-		  we have the rows, we'll just leave it blank. We're going to dynamically fill that in
 
 	- The view
 		- var SearchView = Backbone.View.extend();
 		- First, lets render the collection
 			- add an initialize method to the view, and create a collection to store (this.collection = new LinkCollection())
 			- add a render method to the view.
-			- This should only pull in the full page template and render
-			- add a collectionRender method. This will insert in the dynamic data.
 			- Create a template function from our template
 			- Loop over each element in the views collection, and run the template
 			  function on each model.toJSON();
 			- This returns a string each time. Push those together, and then
 			  set that as the html for the row-container
-			- Also, call delegateEvents on the view, which will re-hook up events.
-			  This is sortof a hack, but its a result of our templating mechanism
 			- To see the view in action, we'll put a $(document).ready() handler
 			  which will render the view
 			- Now our page should be empty... But, we're about to fill it back up!
+			- In fact, we can test this out first by manually adding some things into the collection.
+				- In initialize: this.collection.add({ description: 'Description', link: 'http://link' }); 
+				- Remember to remove this!
 		- Now, let's hook up the events
 			- add an events hash.
 			- set up an event for clicking the js-add-link button:
@@ -146,11 +143,12 @@ Talking Points
 					text = text.toLowerCase();
 					return description.indexOf( text ) >= 0;
 				}
+			- Test this out in the console
 			- Also, we need to listen to the change of that text box. We want it to work
 			  on the fly, so we'll need to listen to keydown events, in our case we'll
 			  just render.
 
-			- Lastly in our renderColleciton, we'll need to filter the collection before we append the
+			- Lastly in our render, we'll need to filter the collection before we append the
 			  html. We can use filter. Also, we'll cast to a collection so the original code
 			  works the same:
 
@@ -158,10 +156,8 @@ Talking Points
 			  var filtered_collection = this.collection.filter(function(model) { return model.matches(search_text); });
 			  filtered_collection = new Backbone.Collection(filtered_collection);
 
-			- Make sure you update renderCollection to use the filtered_collection instead of the this.collection
+			- Make sure you update render to use the filtered_collection instead of the this.collection
+			- ANOTHER APPROACH: Instead of filtering, simply list the matches at the top (and highlight!)
+			- ANOTHER APPROACH: When listing the matches, hightlight the matching text!
 
 - That's a wrap
-				
-
-
-	
